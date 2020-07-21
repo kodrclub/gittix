@@ -1,9 +1,9 @@
-FROM node:14.4.0-alpine3.12
+FROM node:14.5.0-stretch
 
 WORKDIR /app
 
 COPY package.json .
-RUN npm install
+RUN npm install --only=prod
 COPY . .
 
 CMD ["npm", "start"]
