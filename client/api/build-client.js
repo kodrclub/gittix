@@ -10,5 +10,11 @@ export default ({ req }) => {
       }
     : { baseURL: '/' }
 
+  axios.defaults.withCredentials = true /////////
+  axiosDef.withCredentials = true /////////
+  console.log('=================================') /////////
+  console.log(axiosDef) /////////
+  console.log('=================================') /////////
+
   return axios.create(axiosDef)
 }
