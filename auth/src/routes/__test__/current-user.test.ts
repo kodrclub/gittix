@@ -21,5 +21,5 @@ it('responds with undefined if not signed in', async () => {
     .expect(200)
 
   // console.log(response.body)
-  expect(response.body.currentUser).toBeUndefined()
+  expect(response.body.currentUser).toEqual(null)
 })
