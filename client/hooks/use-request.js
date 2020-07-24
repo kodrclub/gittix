@@ -7,7 +7,10 @@ export default ({ url, method, body, onSuccess }) => {
   const doRequest = async () => {
     try {
       setErrors(null)
-      const response = await axios[method](url, body, { withCredentials: true })
+      const response = await axios[method](
+        url,
+        body /*, { withCredentials: true }*/
+      )
 
       if (onSuccess) {
         onSuccess(response.data)

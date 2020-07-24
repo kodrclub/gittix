@@ -16,7 +16,6 @@ export default ({ currentUser }) => {
         </li>
       )
     })
-
   return (
     <nav className="navbar navbar-light bg-light">
       <Link href="/">
@@ -25,6 +24,9 @@ export default ({ currentUser }) => {
 
       <span>aaa@aaa.com</span>
       <span>bbb@bbb.com</span>
+      <span>
+        <b>[{currentUser ? currentUser.email : '-'}]</b>
+      </span>
 
       <div className="d-flex justify-content-end">
         <ul className="nav d-flex align-items-center">{links}</ul>
