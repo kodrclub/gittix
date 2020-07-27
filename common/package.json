@@ -1,23 +1,16 @@
 {
-  "name": "@kodrclub/mst-common",
-  "version": "1.0.13",
+  "name": "@kodrclub-tickets/common",
+  "version": "1.0.15",
   "description": "",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
   "files": [
     "build/**/*"
   ],
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/kodrclub/mst-common.git"
-  },
   "scripts": {
     "build": "npm run clean && tsc",
     "clean": "del ./build/*",
-    "pub": "npm version patch && npm run build && npm publish && git add . && git commit -am \"Common build $(npm view @kodrclub/mst-common version --registry https://npm.pkg.github.com)\""
+    "pub": "npm version patch && npm run build && npm publish --access public && git add . && git commit -am \"Common build $(npm view @kodrclub-tickets/common version)\""
   },
   "keywords": [],
   "author": "",
