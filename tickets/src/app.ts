@@ -2,15 +2,19 @@ import express from 'express'
 import { json } from 'body-parser'
 import 'express-async-errors'
 import cookieSession from 'cookie-session'
-import { createTicketRouter } from './routes/new'
+
 import {
   errorHandler,
   currentUser,
   NotFoundError,
 } from '@kodrclub-tickets/common'
 
+import { createTicketRouter } from './routes/new'
+
 const app = express()
 app.set('trust proxy', true)
+
+// initial uses
 app.use(json())
 app.use(
   cookieSession({
@@ -18,13 +22,15 @@ app.use(
     secure: process.env.NODE_ENV != 'test',
   })
 )
-app.use(createTicketRouter)
 app.use(currentUser)
+app.use(errorHandler)
 
+// route uses
+app.use(createTicketRouter)
+
+// catchall endpoint
 app.all('*', async () => {
   throw new NotFoundError()
 })
-
-app.use(errorHandler)
 
 export { app }
