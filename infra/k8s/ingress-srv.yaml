@@ -10,6 +10,10 @@ spec:
     - host: tickets.fuf.me
       http:
         paths:
+          - path: /api/tickets/?(.*)
+            backend:
+              serviceName: tickets-srv
+              servicePort: 3000
           - path: /api/users/?(.*)
             backend:
               serviceName: auth-srv
