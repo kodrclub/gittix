@@ -21,9 +21,6 @@ it('returns the ticket if the ticket is found', async () => {
     .set('Cookie', global.authenticate())
     .send({ title, price })
     .expect(201)
-  // console.log(response.body)
-  // console.log(response.body.id)
-  // expect(response.status).toEqual(200)
 
   const ticketResponse = await request(app)
     .get(`/api/tickets/${response.body.id}`)
