@@ -60,23 +60,7 @@ global.authenticate = () => {
 
   //encode JSON as base64
   const base64 = Buffer.from(sessionJSON).toString('base64')
-  console.log(base64)
+
   //return a string consisting of the cookie with the encoded data
   return [`express:sess=${base64}`]
 }
-
-// global.authenticate = async () => {
-//   const email = 'test@test.com'
-//   const password = 'password'
-
-//   const response = await request(app)
-//     .post('/api/users/signup')
-//     .send({
-//       email,
-//       password,
-//     })
-//     .expect(201)
-
-//   const cookie = response.get('Set-Cookie')
-//   return cookie
-// }

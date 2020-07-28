@@ -10,6 +10,7 @@ import {
 } from '@kodrclub-tickets/common'
 
 import { createTicketRouter } from './routes/new'
+import { showTicketRouter } from './routes/show'
 
 const app = express()
 app.set('trust proxy', true)
@@ -27,6 +28,7 @@ app.use(errorHandler)
 
 // route uses
 app.use(createTicketRouter)
+app.use(showTicketRouter)
 
 // catchall endpoint
 app.all('*', async () => {
