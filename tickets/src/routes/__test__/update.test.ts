@@ -1,7 +1,8 @@
 import request from 'supertest'
 import { app } from '../../app'
-import { Ticket } from '../../models/ticket'
+// import { Ticket } from '../../models/ticket'
 import mongoose from 'mongoose'
+import { natsWrapper } from '../../nats-wrapper'
 
 const generateId = () => {
   return mongoose.Types.ObjectId().toHexString()
@@ -119,4 +120,29 @@ it('updates the ticket provided valid inputs', async () => {
 
   expect(ticketResponse.body.title).toEqual(title)
   expect(ticketResponse.body.price).toEqual(price)
+})
+
+it('publishes an event', async () => {
+  const cookie = global.authenticate()
+  const title = 'a different valid title'
+  const price = 30.3
+
+  const response = await request(app)
+    .post(`/api/tickets`)
+    .set('Cookie', cookie)
+    .send({
+      title: 'dasdasda',
+      price: 20,
+    })
+
+  await request(app)
+    .put(`/api/tickets/${response.body.id}`)
+    .set('Cookie', cookie)
+    .send({
+      title,
+      price,
+    })
+    .expect(200)
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled()
 })
