@@ -1,6 +1,6 @@
 import express from 'express'
 
-import { currentUser } from '@kodrclub-tickets/common'
+import { currentUser } from '@kc-gittix/common'
 
 const router = express.Router()
 

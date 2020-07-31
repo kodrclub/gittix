@@ -6,7 +6,7 @@ import {
   NotAuthorizedError,
   requireAuth,
   validateRequest,
-} from '@kodrclub-tickets/common'
+} from '@kc-gittix/common'
 import { Ticket } from '../models/ticket'
 import { TicketUpdatedPublisher } from '../events/publishers/ticket-updated-publisher'
 

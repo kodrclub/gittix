@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express'
 import { body } from 'express-validator'
 import jwt from 'jsonwebtoken'
-import { BadRequestError, validateRequest } from '@kodrclub-tickets/common'
+import { BadRequestError, validateRequest } from '@kc-gittix/common'
 import { User } from '../models/user'
 import { Password } from '../services/password'
 

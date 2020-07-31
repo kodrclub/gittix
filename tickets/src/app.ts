@@ -3,11 +3,7 @@ import { json } from 'body-parser'
 import 'express-async-errors'
 import cookieSession from 'cookie-session'
 
-import {
-  errorHandler,
-  currentUser,
-  NotFoundError,
-} from '@kodrclub-tickets/common'
+import { errorHandler, currentUser, NotFoundError } from '@kc-gittix/common'
 
 import { indexTicketRouter } from './routes/index'
 import { newTicketRouter } from './routes/new'

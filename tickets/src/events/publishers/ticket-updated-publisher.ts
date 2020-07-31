@@ -1,8 +1,4 @@
-import {
-  Publisher,
-  Subjects,
-  TicketUpdatedEvent,
-} from '@kodrclub-tickets/common'
+import { Publisher, Subjects, TicketUpdatedEvent } from '@kc-gittix/common'
 
 export class TicketUpdatedPublisher extends Publisher<TicketUpdatedEvent> {
   readonly subject = Subjects.TicketUpdated
