@@ -10,6 +10,16 @@ const start = async () => {
     throw new Error('MONGO_URI not defined')
   }
 
+  if (!process.env.NATS_CLIENT_ID) {
+    throw new Error('NATS_CLIENT_ID not defined')
+  }
+  if (!process.env.NATS_CLUSTER_ID) {
+    throw new Error('NATS_CLUSTER_ID not defined')
+  }
+  if (!process.env.NATS_URL) {
+    throw new Error('NATS_URL not defined')
+  }
+
   try {
     await natsWrapper.connect('ticketing', 'uyiuqityi', 'http://nats-srv:4222')
     natsWrapper.client.on('close', () => {
