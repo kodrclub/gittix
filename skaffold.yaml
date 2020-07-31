@@ -16,6 +16,7 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
+
     - image: kodrclub/mst-client
       context: client
       docker:
@@ -24,6 +25,16 @@ build:
         manual:
           - src: '**/*.js'
             dest: .
+
+    - image: kodrclub/mst-orders
+      context: orders
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+
     - image: kodrclub/mst-tickets
       context: tickets
       docker:
