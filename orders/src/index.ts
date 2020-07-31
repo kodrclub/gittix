@@ -21,9 +21,13 @@ const start = async () => {
   }
 
   try {
-    await natsWrapper.connect('ticketing', 'uyiuqityi', 'http://nats-srv:4222')
+    await natsWrapper.connect(
+      process.env.NATS_CLUSTER_ID,
+      process.env.NATS_CLIENT_ID,
+      process.env.NATS_URL
+    )
     natsWrapper.client.on('close', () => {
-      console.log('>>> tickets NATS connection closed!')
+      console.log('>>> orders NATS connection closed!')
       process.exit()
     })
     process.on('SIGINT', () => natsWrapper.client.close())
@@ -34,13 +38,13 @@ const start = async () => {
       useUnifiedTopology: true,
       useCreateIndex: true,
     })
-    console.log('>>> tickets connected to MongoDB')
+    console.log('>>> orders connected to MongoDB')
   } catch (err) {
     console.log(err)
   }
 
   app.listen(3000, () => {
-    console.log('>>> tickets listening on port 3000')
+    console.log('>>> orders listening on port 3000')
   })
 }
 

@@ -9,9 +9,9 @@ import {
   NotFoundError,
 } from '@kodrclub-tickets/common'
 
-import { createTicketRouter } from './routes/new'
-import { showTicketRouter } from './routes/show'
 import { indexTicketRouter } from './routes/index'
+import { newTicketRouter } from './routes/new'
+import { showTicketRouter } from './routes/show'
 import { updateTicketRouter } from './routes/update'
 
 const app = express()
@@ -29,9 +29,9 @@ app.use(currentUser)
 app.use(errorHandler)
 
 // route uses
-app.use(createTicketRouter)
-app.use(showTicketRouter)
 app.use(indexTicketRouter)
+app.use(newTicketRouter)
+app.use(showTicketRouter)
 app.use(updateTicketRouter)
 
 // catchall endpoint

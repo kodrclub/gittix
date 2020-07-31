@@ -5,7 +5,7 @@ console.clear()
 
 const myRandomId = randomBytes(4).toString('hex')
 
-const stan = nats.connect('ticketing', myRandomId, {
+const stan = nats.connect('gittix', myRandomId, {
   url: 'http://localhost:4222',
 })
 
