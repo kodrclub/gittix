@@ -8,7 +8,7 @@ import {
   validateRequest,
 } from '@kc-gittix/common'
 import { Order, OrderStatus } from '../models/order'
-// import { OrderUpdatedPublisher } from '../events/publishers/order-updated-publisher'
+import { OrderCancelledPublisher } from '../events/publishers/order-cancelled-publisher'
 
 const router = express.Router()
 
@@ -29,12 +29,12 @@ router.delete(
       status: OrderStatus.Cancelled,
     })
     await order.save()
-    // await new OrderUpdatedPublisher(natsWrapper.client).publish({
-    //   id: order.id,
-    //   title: order.title,
-    //   price: order.price,
-    //   userId: order.userId,
-    // })
+    await new OrderCancelledPublisher(natsWrapper.client).publish({
+      id: order.id,
+      ticket: {
+        id: order.ticket.id,
+      },
+    })
 
     res.status(204).send(order)
   }

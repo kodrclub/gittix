@@ -2,7 +2,7 @@ import request from 'supertest'
 import { app } from '../../app'
 import { Order, OrderStatus } from '../../models/order'
 import { Ticket } from '../../models/ticket'
-// import { natsWrapper } from '../../nats-wrapper'
+import { natsWrapper } from '../../nats-wrapper'
 import mongoose from 'mongoose'
 
 const generateId = () => {
@@ -82,20 +82,25 @@ it('creates a order with valid inputs', async () => {
   expect((await Order.find()).length).toEqual(1)
 })
 
-it.todo('publishes an event')
-// it('publishes an event', async () => {
-//   const title = 'A test title'
-//   const price = 10.5
-//   await request(app)
-//     .post('/api/orders')
-//     .set('Cookie', global.authenticate())
-//     .send({
-//       title,
-//       price,
-//     })
-//     .expect(201)
+// it.todo('publishes an event')
+it('publishes an event', async () => {
+  const ticket = Ticket.build({
+    title: 'Test title',
+    price: 20,
+  })
+  await ticket.save()
 
-//   expect(natsWrapper.client.publish).toHaveBeenCalled()
-// })
+  expect((await Order.find()).length).toEqual(0)
+
+  await request(app)
+    .post('/api/orders')
+    .set('Cookie', global.authenticate())
+    .send({
+      ticketId: ticket.id,
+    })
+    .expect(201)
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled()
+})
 
 // it('', async()=>{})

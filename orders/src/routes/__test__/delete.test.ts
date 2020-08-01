@@ -97,28 +97,29 @@ it('marks an order as cancelled', async () => {
   expect(fetchedOrder!.status).toEqual(OrderStatus.Cancelled)
 })
 
-it.todo('publishes an event')
-// it('publishes an event', async () => {
-//   const cookie = global.authenticate()
-//   const title = 'a different valid title'
-//   const price = 30.3
+// it.todo('publishes an event')
+it('publishes an event', async () => {
+  const ticket = Ticket.build({
+    title: 'Some title',
+    price: 50,
+  })
+  await ticket.save()
 
-//   const response = await request(app)
-//     .post(`/api/tickets`)
-//     .set('Cookie', cookie)
-//     .send({
-//       title: 'dasdasda',
-//       price: 20,
-//     })
+  const user = global.authenticate()
 
-//   await request(app)
-//     .put(`/api/tickets/${response.body.id}`)
-//     .set('Cookie', cookie)
-//     .send({
-//       title,
-//       price,
-//     })
-//     .expect(200)
+  const { body: order } = await request(app)
+    .post('/api/orders')
+    .set('Cookie', user)
+    .send({
+      ticketId: ticket.id,
+    })
+    .expect(201)
 
-//   expect(natsWrapper.client.publish).toHaveBeenCalled()
-// })
+  const { body: deletedOrder } = await request(app)
+    .delete(`/api/orders/${order.id}`)
+    .set('Cookie', user)
+    .send()
+    .expect(204)
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled()
+})

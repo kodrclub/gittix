@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express'
 import { body } from 'express-validator'
-// import { natsWrapper } from '../nats-wrapper'
+import { natsWrapper } from '../nats-wrapper'
 import {
   requireAuth,
   validateRequest,
@@ -10,8 +10,7 @@ import {
 } from '@kc-gittix/common'
 import { Order } from '../models/order'
 import { Ticket } from '../models/ticket'
-import { EDESTADDRREQ } from 'constants'
-// import { OrderCreatedPublisher } from '../events/publishers/order-created-publisher'
+import { OrderCreatedPublisher } from '../events/publishers/order-created-publisher'
 
 const router = express.Router()
 const EXPIRATION_WINDOW_SECONDS = 15 * 6
@@ -50,6 +49,16 @@ router.post(
     await order.save()
 
     // publish an event saying that the order was created
+    await new OrderCreatedPublisher(natsWrapper.client).publish({
+      id: order.id,
+      status: OrderStatus.Created,
+      expiresAt: order.expiresAt.toISOString(),
+      userId: req.currentUser!.id,
+      ticket: {
+        id: ticket.id,
+        price: ticket.price,
+      },
+    })
 
     res.status(201).send(order)
   }
