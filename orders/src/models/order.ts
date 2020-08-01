@@ -1,4 +1,6 @@
 import mongoose from 'mongoose'
+import { OrderStatus } from '@kc-gittix/common'
+import { TicketDoc } from './ticket'
 
 /*
 Describes the properties required to create a new user
@@ -34,6 +36,8 @@ const orderSchema = new mongoose.Schema(
     status: {
       type: String,
       required: true,
+      enum: Object.values(OrderStatus),
+      default: OrderStatus.Created,
     },
     expiresAt: {
       type: mongoose.Schema.Types.Date,
@@ -61,4 +65,4 @@ orderSchema.statics.build = (attrs: OrderAttrs) => {
 
 const Order = mongoose.model<OrderDoc, OrderModel>('Order', orderSchema)
 
-export { Order }
+export { Order, OrderStatus }

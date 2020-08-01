@@ -1,27 +1,20 @@
-// import express, { Request, Response } from 'express'
-// // import { Order } from '../models/order'
-
-// const router = express.Router()
-
-// router.post('/api/orders/', async (req: Request, res: Response) => {
-//   const orders = {} //await Order.find({})
-
-//   res.send(orders)
-// })
-
-// export { router as newOrderRouter }
-// //
-//---------------------------------------------------------------------------------------------
-//
-
 import express, { Request, Response } from 'express'
 import { body } from 'express-validator'
 // import { natsWrapper } from '../nats-wrapper'
-import { requireAuth, validateRequest } from '@kc-gittix/common'
-// import { Order } from '../models/order'
+import {
+  requireAuth,
+  validateRequest,
+  NotFoundError,
+  OrderStatus,
+  BadRequestError,
+} from '@kc-gittix/common'
+import { Order } from '../models/order'
+import { Ticket } from '../models/ticket'
+import { EDESTADDRREQ } from 'constants'
 // import { OrderCreatedPublisher } from '../events/publishers/order-created-publisher'
 
 const router = express.Router()
+const EXPIRATION_WINDOW_SECONDS = 15 * 6
 
 router.post(
   '/api/orders',
@@ -29,23 +22,35 @@ router.post(
   [body('ticketId').not().isEmpty().withMessage('TicketId is required')],
   validateRequest,
   async (req: Request, res: Response) => {
-    res.send({})
-    // const { title, price } = req.body
+    const { ticketId } = req.body
 
-    // const order = Order.build({
-    //   title,
-    //   price,
-    //   userId: req.currentUser!.id,
-    // })
-    // await order.save()
-    // await new OrderCreatedPublisher(natsWrapper.client).publish({
-    //   id: order.id,
-    //   title: order.title,
-    //   price: order.price,
-    //   userId: order.userId,
-    // })
+    // find in the database the ticket the user is trying to order
+    const ticket = await Ticket.findById(ticketId)
+    if (!ticket) {
+      throw new NotFoundError()
+    }
 
-    // res.status(201).send(order)
+    // make sure that the ticket is not already reserved
+    const isReserved = await ticket.isReserved()
+    if (isReserved) {
+      throw new BadRequestError('Ticket is already reserved')
+    }
+
+    // calculate an expiration date for the order
+    const expiration = new Date()
+    expiration.setSeconds(expiration.getSeconds() + EXPIRATION_WINDOW_SECONDS)
+
+    // build the order and save it to the db
+    const order = Order.build({
+      userId: req.currentUser!.id,
+      status: OrderStatus.Created,
+      expiresAt: expiration,
+      ticket,
+    })
+
+    // publish an event saying that the ordar
+
+    res.status(201).send(order)
   }
 )
 
