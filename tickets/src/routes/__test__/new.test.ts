@@ -23,7 +23,7 @@ it('returns a status other than 401 if the user is signed in', async () => {
 })
 
 it('returns an error if an invalid title is provided', async () => {
-  request(app)
+  await request(app)
     .post('/api/tickets')
     .set('Cookie', global.authenticate())
     .send({

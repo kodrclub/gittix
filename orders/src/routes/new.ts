@@ -47,8 +47,9 @@ router.post(
       expiresAt: expiration,
       ticket,
     })
+    await order.save()
 
-    // publish an event saying that the ordar
+    // publish an event saying that the order was created
 
     res.status(201).send(order)
   }
