@@ -1,6 +1,5 @@
 import request from 'supertest'
 import { app } from '../../app'
-import { Order, OrderStatus } from '../../models/order'
 import { Ticket } from '../../models/ticket'
 import mongoose from 'mongoose'
 
@@ -34,17 +33,15 @@ it('returns a 401 if the user is not authenticated', async () => {
     .expect(201)
 
   const orderResponse = await request(app)
-    .get('/api/orders/')
-    .send({ orderId: response.body.id })
+    .get(`/api/orders/${response.body.id}`)
+    .send()
     .expect(401)
 })
 
 it('returns a 401 if the user does not own the order', async () => {
-  const title = 'Some title'
-  const price = 3.5
   const ticket = Ticket.build({
-    title,
-    price,
+    title: 'Some title',
+    price: 50,
   })
   await ticket.save()
 
@@ -67,11 +64,9 @@ it('returns a 401 if the user does not own the order', async () => {
 })
 
 it('returns the order if the order is found', async () => {
-  const title = 'Some title'
-  const price = 3.5
   const ticket = Ticket.build({
-    title,
-    price,
+    title: 'Some title',
+    price: 50,
   })
   await ticket.save()
 
@@ -88,7 +83,7 @@ it('returns the order if the order is found', async () => {
   const { body: fetchedOrder } = await request(app)
     .get(`/api/orders/${order.id}`)
     .set('Cookie', user)
-    .send({ orderId: order.id })
+    .send()
     .expect(200)
 
   expect(fetchedOrder.id).toEqual(order.id)
