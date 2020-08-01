@@ -1,32 +1,27 @@
 import express, { Request, Response } from 'express'
-// import { Order } from '../models/order'
+import {
+  NotAuthorizedError,
+  NotFoundError,
+  requireAuth,
+} from '@kc-gittix/common'
+import { Order } from '../models/order'
 
 const router = express.Router()
 
-router.get('/api/orders/:orderId', async (req: Request, res: Response) => {
-  const orders = {} //await Order.find({})
+router.get(
+  '/api/orders/:orderId',
+  requireAuth,
+  async (req: Request, res: Response) => {
+    const order = await Order.findById(req.params.orderId)
+    if (!order) {
+      throw new NotFoundError()
+    }
+    if (order.userId != req.currentUser!.id) {
+      throw new NotAuthorizedError()
+    }
 
-  res.send(orders)
-})
+    res.send(order)
+  }
+)
 
 export { router as showOrderRouter }
-//
-//---------------------------------------------------------------------------------------------
-//
-
-// import express, { Request, Response } from 'express'
-// import { NotFoundError } from '@kodrclub-orders/common'
-// import { Order } from '../models/order'
-
-// const router = express.Router()
-
-// router.get('/api/orders/:id', async (req: Request, res: Response) => {
-//   const order = await Order.findById(req.params.id)
-//   if (!order) {
-//     throw new NotFoundError()
-//   }
-
-//   res.send(order)
-// })
-
-// export { router as showOrderRouter }
