@@ -4,8 +4,8 @@ import { updateIfCurrentPlugin } from 'mongoose-update-if-current'
 Describes the properties required to create a new user
 */
 interface TicketAttrs {
-  title: string
   price: number
+  title: string
   userId: string
 }
 
@@ -13,8 +13,9 @@ interface TicketAttrs {
 Describes the properties that a Ticket Document has
 */
 interface TicketDoc extends mongoose.Document {
-  title: string
+  orderId?: string
   price: number
+  title: string
   userId: string
   version: number
 }
@@ -28,12 +29,16 @@ interface TicketModel extends mongoose.Model<TicketDoc> {
 
 const ticketSchema = new mongoose.Schema(
   {
-    title: {
+    orderId: {
       type: String,
-      required: true,
+      required: false,
     },
     price: {
       type: Number,
+      required: true,
+    },
+    title: {
+      type: String,
       required: true,
     },
     userId: {
