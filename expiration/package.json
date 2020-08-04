@@ -19,7 +19,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@kc-gittix/common": "^1.0.24",
+    "@kc-gittix/common": "^1.0.25",
     "@types/bull": "^3.14.0",
     "bull": "^3.16.0",
     "ts-node-dev": "^1.0.0-pre.49",
