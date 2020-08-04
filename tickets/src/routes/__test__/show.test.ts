@@ -3,7 +3,7 @@ import { app } from '../../app'
 import mongoose from 'mongoose'
 
 it('returns a 404 if the ticket is not found', async () => {
-  const id = mongoose.Types.ObjectId().toHexString()
+  const id = global.generateId()
 
   const r = await request(app)
     .get(`/api/tickets/${id}`) //BEWARE!!! make sure to use a valid ObjectId. Just passing a random string as an id will result in a 500 error!

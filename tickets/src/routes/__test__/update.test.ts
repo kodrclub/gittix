@@ -5,7 +5,7 @@ import mongoose from 'mongoose'
 import { natsWrapper } from '../../nats-wrapper'
 
 const generateId = () => {
-  return mongoose.Types.ObjectId().toHexString()
+  return global.generateId()
 }
 
 it('returns a 404 if the provided id does not exist', async () => {

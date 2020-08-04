@@ -11,7 +11,7 @@ const setup = async () => {
 
   //create and save a ticket
   const ticket = Ticket.build({
-    id: mongoose.Types.ObjectId().toHexString(),
+    id: global.generateId(),
     title: 'concert',
     price: 20,
   })

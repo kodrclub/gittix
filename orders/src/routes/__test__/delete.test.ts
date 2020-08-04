@@ -6,7 +6,7 @@ import mongoose from 'mongoose'
 import { natsWrapper } from '../../nats-wrapper'
 
 const generateId = () => {
-  return mongoose.Types.ObjectId().toHexString()
+  return global.generateId()
 }
 
 it.todo('returns a 404 if the order does not exist')
@@ -72,6 +72,7 @@ it.todo('returns a 401 if the user does not own the order')
 
 it('marks an order as cancelled', async () => {
   const ticket = Ticket.build({
+    id: global.generateId(),
     title: 'Some title',
     price: 50,
   })
@@ -100,6 +101,7 @@ it('marks an order as cancelled', async () => {
 // it.todo('publishes an event')
 it('publishes an event', async () => {
   const ticket = Ticket.build({
+    id: global.generateId(),
     title: 'Some title',
     price: 50,
   })

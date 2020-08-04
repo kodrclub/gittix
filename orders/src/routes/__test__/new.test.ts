@@ -6,7 +6,7 @@ import { natsWrapper } from '../../nats-wrapper'
 import mongoose from 'mongoose'
 
 const generateId = () => {
-  return mongoose.Types.ObjectId().toHexString()
+  return global.generateId()
 }
 
 it('has a route handler listening at /api/orders for post requests', async () => {

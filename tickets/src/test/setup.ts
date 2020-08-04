@@ -10,6 +10,7 @@ declare global {
   namespace NodeJS {
     interface Global {
       authenticate(): string[]
+      generateId(): string
     }
   }
 }
@@ -49,7 +50,7 @@ afterAll(async () => {
 global.authenticate = () => {
   //build JWT payload {id, email}
   const payload = {
-    id: new mongoose.Types.ObjectId().toHexString(),
+    id: global.generateId(),
     email: 'test@test.com',
   }
 
@@ -67,4 +68,8 @@ global.authenticate = () => {
 
   //return a string consisting of the cookie with the encoded data
   return [`express:sess=${base64}`]
+}
+
+global.generateId = () => {
+  return mongoose.Types.ObjectId().toHexString()
 }

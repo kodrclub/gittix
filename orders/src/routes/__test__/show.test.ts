@@ -4,7 +4,7 @@ import { Ticket } from '../../models/ticket'
 import mongoose from 'mongoose'
 
 it('returns a 404 if the order is not found', async () => {
-  const id = mongoose.Types.ObjectId().toHexString()
+  const id = global.generateId()
 
   const r = await request(app)
     .get(`/api/orders/${id}`) //BEWARE!!! make sure to use a valid ObjectId. Just passing a random string as an id will result in a 500 error!
@@ -17,6 +17,7 @@ it('returns a 401 if the user is not authenticated', async () => {
   const title = 'Some title'
   const price = 3.5
   const ticket = Ticket.build({
+    id: global.generateId(),
     title,
     price,
   })
@@ -40,6 +41,7 @@ it('returns a 401 if the user is not authenticated', async () => {
 
 it('returns a 401 if the user does not own the order', async () => {
   const ticket = Ticket.build({
+    id: global.generateId(),
     title: 'Some title',
     price: 50,
   })
@@ -65,6 +67,7 @@ it('returns a 401 if the user does not own the order', async () => {
 
 it('returns the order if the order is found', async () => {
   const ticket = Ticket.build({
+    id: global.generateId(),
     title: 'Some title',
     price: 50,
   })

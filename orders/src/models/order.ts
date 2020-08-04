@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 import { OrderStatus } from '@kc-gittix/common'
 import { TicketDoc } from './ticket'
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current'
 
 /*
 Describes the properties required to create a new user
@@ -19,6 +20,7 @@ interface OrderDoc extends mongoose.Document {
   status: string
   expiresAt: Date
   ticket: TicketDoc
+  version: number
 }
 /*
 Describes the properties that a Order Model has
@@ -58,6 +60,8 @@ const orderSchema = new mongoose.Schema(
     },
   }
 )
+orderSchema.set('versionKey', 'version')
+orderSchema.plugin(updateIfCurrentPlugin)
 
 orderSchema.statics.build = (attrs: OrderAttrs) => {
   return new Order(attrs)
