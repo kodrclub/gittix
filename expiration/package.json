@@ -1,0 +1,34 @@
+{
+  "name": "expiration",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node-dev src/index.ts",
+    "test": "jest --watchAll --no-cache --runInBand --detectOpenHandles",
+    "upd": "npm update @kc-gittix/common"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": [
+      "./src/test/setup.ts"
+    ]
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@kc-gittix/common": "^1.0.24",
+    "@types/bull": "^3.14.0",
+    "bull": "^3.16.0",
+    "ts-node-dev": "^1.0.0-pre.49",
+    "typescript": "^3.9.5",
+    "util": "^0.12.3"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.5",
+    "jest": "^26.1.0",
+    "ts-jest": "^26.1.3"
+  }
+}

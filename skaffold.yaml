@@ -17,6 +17,15 @@ build:
           - src: 'src/**/*.ts'
             dest: .
 
+    - image: kodrclub/mst-expiration
+      context: expiration
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+
     - image: kodrclub/mst-client
       context: client
       docker:

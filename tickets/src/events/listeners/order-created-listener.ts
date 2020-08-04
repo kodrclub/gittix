@@ -1,6 +1,5 @@
 import { Message } from 'node-nats-streaming'
 import { Subjects, Listener, OrderCreatedEvent } from '@kc-gittix/common'
-// import { Order } from '../../models/order'
 import { Ticket } from '../../models/ticket'
 import { queueGroupName } from './queue-group-name'
 import { TicketUpdatedPublisher } from '../publishers/ticket-updated-publisher'
