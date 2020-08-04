@@ -13,7 +13,7 @@ import { Ticket } from '../models/ticket'
 import { OrderCreatedPublisher } from '../events/publishers/order-created-publisher'
 
 const router = express.Router()
-const EXPIRATION_WINDOW_SECONDS = 15 * 6
+const EXPIRATION_WINDOW_SECONDS = 1 * 60
 
 router.post(
   '/api/orders',

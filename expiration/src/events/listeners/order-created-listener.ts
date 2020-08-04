@@ -1,8 +1,9 @@
+import { expirationQueue } from '../../queues/expiration-queue'
+import { Listener, OrderCreatedEvent, Subjects } from '@kc-gittix/common'
 import { Message } from 'node-nats-streaming'
-import { Subjects, Listener, OrderCreatedEvent } from '@kc-gittix/common'
 // import { Order } from '../../models/order'
-// import { Ticket } from '../../models/ticket'
 import { queueGroupName } from './queue-group-name'
+// import { Ticket } from '../../models/ticket'
 // import { TicketUpdatedPublisher } from '../publishers/ticket-updated-publisher'
 
 export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
@@ -11,6 +12,17 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
   queueGroupName = queueGroupName
 
   async onMessage(data: OrderCreatedEvent['data'], msg: Message) {
+    const delay = new Date(data.expiresAt).getTime() - new Date().getTime()
+    console.log('DDDDDDDDDDD - DELAY: ' + delay)
+
+    await expirationQueue.add(
+      {
+        orderId: data.id,
+      },
+      {
+        delay: delay,
+      }
+    )
     // const ticket = await Ticket.findById(data.ticket.id)
 
     // if (!ticket) {
