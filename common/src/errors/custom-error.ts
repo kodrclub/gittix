@@ -3,6 +3,7 @@ export abstract class CustomError extends Error {
 
   constructor(message: string) {
     super(message)
+
     //Only bc we're extending a built-in class
     Object.setPrototypeOf(this, CustomError.prototype)
   }
