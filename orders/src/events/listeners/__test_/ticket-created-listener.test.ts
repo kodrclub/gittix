@@ -1,5 +1,4 @@
 import { Message } from 'node-nats-streaming'
-import mongoose from 'mongoose'
 import { natsWrapper } from '../../../nats-wrapper'
 import { Ticket } from '../../../models/ticket'
 import { TicketCreatedEvent } from '@kc-gittix/common'

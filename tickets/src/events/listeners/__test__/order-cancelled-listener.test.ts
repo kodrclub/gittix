@@ -24,6 +24,7 @@ const setup = async () => {
     ticket: {
       id: ticket.id,
     },
+    version: ticket.version,
   }
 
   // create a fake message object
