@@ -1,6 +1,7 @@
 import request from 'supertest'
 import { app } from '../../app'
 import { Order } from '../../models/order'
+// import { Payment } from '../../models/payment'
 // import { natsWrapper } from '../../nats-wrapper'
 import { OrderStatus } from '@kc-gittix/common'
 import { stripe } from '../../stripe'
@@ -85,6 +86,13 @@ it('returns a 201 with valid inputs', async () => {
   const chargeOptions = (stripe.charges.create as jest.Mock).mock.calls[0][0]
   expect(chargeOptions.amount).toEqual(20 * 100)
   expect(chargeOptions.currency).toEqual('eur')
+
+  // const payment = await Payment.findOne({
+  //   orderId: order.id,
+  //   stripeId: chargeOptions!.id,
+  // })
+  // console.log(payment)
+  // expect(payment).not.toBeNull()
 })
 
 //
