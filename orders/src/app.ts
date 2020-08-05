@@ -22,7 +22,6 @@ app.use(
   })
 )
 app.use(currentUser)
-app.use(errorHandler)
 
 // route uses
 app.use(deleteOrderRouter)
@@ -34,5 +33,7 @@ app.use(showOrderRouter)
 app.all('*', async () => {
   throw new NotFoundError()
 })
+
+app.use(errorHandler) //must be right at the end!
 
 export { app }

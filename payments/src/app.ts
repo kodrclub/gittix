@@ -34,5 +34,6 @@ app.all('*', async () => {
   throw new NotFoundError()
 })
 
-app.use(errorHandler)
+app.use(errorHandler) //must be right at the end!
+
 export { app }

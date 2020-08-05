@@ -21,7 +21,6 @@ app.use(
     secure: process.env.NODE_ENV != 'test',
   })
 )
-app.use(errorHandler)
 
 // route uses
 app.use(currentUserRouter)
@@ -33,5 +32,7 @@ app.use(signupRouter)
 app.all('*', async () => {
   throw new NotFoundError()
 })
+
+app.use(errorHandler) //must be right at the end!
 
 export { app }
