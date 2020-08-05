@@ -1,24 +1,24 @@
 import mongoose from 'mongoose'
 import { OrderStatus } from '@kc-gittix/common'
-import { TicketDoc } from './ticket'
+// import { TicketDoc } from './ticket'
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current'
 
 /*
 Describes the properties required to create a new order
 */
 interface OrderAttrs {
-  expiresAt: Date
+  id: string
+  price: number
   status: OrderStatus
-  ticket: TicketDoc
   userId: string
+  version: number
 }
 /*
 Describes the properties that a Order Document has
 */
 interface OrderDoc extends mongoose.Document {
-  expiresAt: Date
+  price: number
   status: OrderStatus
-  ticket: TicketDoc
   userId: string
   version: number
 }
@@ -31,19 +31,15 @@ interface OrderModel extends mongoose.Model<OrderDoc> {
 
 const orderSchema = new mongoose.Schema(
   {
-    expiresAt: {
-      type: mongoose.Schema.Types.Date,
-      required: false,
+    price: {
+      type: Number,
+      ref: 'Ticket',
     },
     status: {
       type: String,
       required: true,
       enum: Object.values(OrderStatus),
       default: OrderStatus.Created,
-    },
-    ticket: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Ticket',
     },
     userId: {
       type: String,
@@ -64,9 +60,15 @@ orderSchema.set('versionKey', 'version')
 orderSchema.plugin(updateIfCurrentPlugin)
 
 orderSchema.statics.build = (attrs: OrderAttrs) => {
-  return new Order(attrs)
+  return new Order({
+    _id: attrs.id,
+    price: attrs.price,
+    status: attrs.status,
+    userId: attrs.userId,
+    version: attrs.version,
+  })
 }
 
 const Order = mongoose.model<OrderDoc, OrderModel>('Order', orderSchema)
 
-export { Order, OrderStatus }
+export { Order }
