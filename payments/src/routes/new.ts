@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express'
 import { body } from 'express-validator'
-// import { natsWrapper } from '../nats-wrapper'
+import { natsWrapper } from '../nats-wrapper'
 import {
   BadRequestError,
   NotAuthorizedError,
@@ -9,10 +9,9 @@ import {
   validateRequest,
   OrderStatus,
 } from '@kc-gittix/common'
-// import { Charge } from '../models/charge'
-// import { ChargeCreatedPublisher } from '../events/publishers/charge-created-publisher'
 import { Order } from '../models/order'
 import { Payment } from '../models/payment'
+import { PaymentCreatedPublisher } from '../events/publishers/payment-created-publisher'
 import { stripe } from '../stripe'
 
 const router = express.Router()
@@ -50,19 +49,15 @@ router.post(
       orderId,
       stripeId: charge.id,
     })
+    await payment.save()
 
-    res.status(201).send({ success: true })
+    await new PaymentCreatedPublisher(natsWrapper.client).publish({
+      id: payment.id,
+      orderId: payment.orderId,
+      stripeId: payment.stripeId,
+    })
 
-    // await charge.save()
-    // await new ChargeCreatedPublisher(natsWrapper.client).publish({
-    //   id: charge.id,
-    //   title: charge.title,
-    //   price: charge.price,
-    //   userId: charge.userId,
-    //   version: charge.version,
-    // })
-
-    // res.status(201).send(charge)
+    res.status(201).send({ id: payment.id })
   }
 )
 
