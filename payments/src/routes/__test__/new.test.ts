@@ -3,6 +3,9 @@ import { app } from '../../app'
 import { Order } from '../../models/order'
 // import { natsWrapper } from '../../nats-wrapper'
 import { OrderStatus } from '@kc-gittix/common'
+import { stripe } from '../../stripe'
+
+jest.mock('../../stripe')
 
 it('returns a 404 when trying to purchase an order that does not exist', async () => {
   //
@@ -58,6 +61,37 @@ it('returns a 400 when trying to purchase a cancelled order ', async () => {
     .expect(400)
 })
 
+it('returns a 201 with valid inputs', async () => {
+  const userId = global.generateId()
+
+  const order = Order.build({
+    id: global.generateId(),
+    price: 20,
+    status: OrderStatus.Created,
+    userId,
+    version: 0,
+  })
+  await order.save()
+
+  await request(app)
+    .post('/api/payments')
+    .set('Cookie', global.authenticate(userId))
+    .send({
+      token: 'tok_visa',
+      orderId: order.id,
+    })
+    .expect(201)
+
+  const chargeOptions = (stripe.charges.create as jest.Mock).mock.calls[0][0]
+  expect(chargeOptions.amount).toEqual(20 * 100)
+  expect(chargeOptions.currency).toEqual('eur')
+})
+
+//
+//
+//----------------------------------------------------------------------------------------------------------
+//
+//
 // it('has a route handler listening at /api/tickets for post requests', async () => {
 //   const response = await request(app).post('/api/tickets').send({})
 
