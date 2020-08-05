@@ -5,10 +5,10 @@ import cookieSession from 'cookie-session'
 
 import { errorHandler, currentUser, NotFoundError } from '@kc-gittix/common'
 
-// import { indexTicketRouter } from './routes/index'
-// import { newTicketRouter } from './routes/new'
-// import { showTicketRouter } from './routes/show'
-// import { updateTicketRouter } from './routes/update'
+// import { indexChargeRouter } from './routes/index'
+import { newChargeRouter } from './routes/new'
+// import { showChargeRouter } from './routes/show'
+// import { updateChargeRouter } from './routes/update'
 
 const app = express()
 app.set('trust proxy', true)
@@ -25,10 +25,10 @@ app.use(currentUser)
 app.use(errorHandler)
 
 // route uses
-// app.use(indexTicketRouter)
-// app.use(newTicketRouter)
-// app.use(showTicketRouter)
-// app.use(updateTicketRouter)
+// app.use(indexChargeRouter)
+app.use(newChargeRouter)
+// app.use(showChargeRouter)
+// app.use(updateChargeRouter)
 
 // catchall endpoint
 app.all('*', async () => {

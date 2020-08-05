@@ -9,7 +9,7 @@ jest.mock('../nats-wrapper')
 declare global {
   namespace NodeJS {
     interface Global {
-      authenticate(): string[]
+      authenticate(userId?: string): string[]
       generateId(): string
     }
   }
@@ -47,10 +47,10 @@ afterAll(async () => {
 //-------------------------------------------
 //
 
-global.authenticate = () => {
+global.authenticate = (userId?: string) => {
   //build JWT payload {id, email}
   const payload = {
-    id: global.generateId(),
+    id: userId || global.generateId(),
     email: 'test@test.com',
   }
 
