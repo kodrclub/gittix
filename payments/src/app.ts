@@ -22,7 +22,6 @@ app.use(
   })
 )
 app.use(currentUser)
-app.use(errorHandler)
 
 // route uses
 // app.use(indexChargeRouter)
@@ -35,4 +34,5 @@ app.all('*', async () => {
   throw new NotFoundError()
 })
 
+app.use(errorHandler)
 export { app }
