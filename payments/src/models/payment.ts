@@ -1,15 +1,23 @@
 import mongoose from 'mongoose'
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current'
 
+/*
+Describes the properties required to create a new payment
+*/
 interface PaymentAttrs {
   orderId: string
   stripeId: string
 }
-
+/*
+Describes the properties that a Payment Document has
+*/
 interface PaymentDoc extends mongoose.Document {
   orderId: string
   stripeId: string
 }
-
+/*
+Describes the properties that a Payment Model has
+*/
 interface PaymentModel extends mongoose.Model<PaymentDoc> {
   build(attrs: PaymentAttrs): PaymentDoc
 }
@@ -17,12 +25,12 @@ interface PaymentModel extends mongoose.Model<PaymentDoc> {
 const paymentSchema = new mongoose.Schema(
   {
     orderId: {
-      required: true,
       type: String,
+      required: true,
     },
     stripeId: {
-      required: true,
       type: String,
+      required: true,
     },
   },
   {
@@ -30,10 +38,13 @@ const paymentSchema = new mongoose.Schema(
       transform(doc, ret) {
         ret.id = ret._id
         delete ret._id
+        delete ret.__v
       },
     },
   }
 )
+paymentSchema.set('versionKey', 'version')
+paymentSchema.plugin(updateIfCurrentPlugin)
 
 paymentSchema.statics.build = (attrs: PaymentAttrs) => {
   return new Payment(attrs)

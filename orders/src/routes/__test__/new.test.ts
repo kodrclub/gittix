@@ -40,6 +40,7 @@ it('returns a 404 error if the ticket does not exist', async () => {
 
 it('returns an error if the ticket is already reserved', async () => {
   const ticket = Ticket.build({
+    id: global.generateId(),
     title: 'Test title',
     price: 20,
   })
@@ -64,6 +65,7 @@ it('returns an error if the ticket is already reserved', async () => {
 
 it('creates a order with valid inputs', async () => {
   const ticket = Ticket.build({
+    id: global.generateId(),
     title: 'Test title',
     price: 20,
   })
@@ -85,6 +87,7 @@ it('creates a order with valid inputs', async () => {
 // it.todo('publishes an event')
 it('publishes an event', async () => {
   const ticket = Ticket.build({
+    id: global.generateId(),
     title: 'Test title',
     price: 20,
   })
