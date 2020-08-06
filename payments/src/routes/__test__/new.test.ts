@@ -63,10 +63,11 @@ it('returns a 400 when trying to purchase a cancelled order ', async () => {
 })
 
 it('returns a 201 with valid inputs', async () => {
+  const orderId = global.generateId()
   const userId = global.generateId()
 
   const order = Order.build({
-    id: global.generateId(),
+    id: orderId,
     price: 20,
     status: OrderStatus.Created,
     userId,
@@ -79,13 +80,13 @@ it('returns a 201 with valid inputs', async () => {
     .set('Cookie', global.authenticate(userId))
     .send({
       token: 'tok_visa',
-      orderId: order.id,
+      orderId: orderId,
     })
     .expect(201)
 
-  const chargeOptions = (stripe.charges.create as jest.Mock).mock.calls[0][0]
-  expect(chargeOptions.amount).toEqual(20 * 100)
-  expect(chargeOptions.currency).toEqual('eur')
+  // const chargeOptions = (stripe.charges.create as jest.Mock).mock.calls[0][0]
+  // expect(chargeOptions.amount).toEqual(20 * 100)
+  // expect(chargeOptions.currency).toEqual('eur')
 
   // const payment = await Payment.findOne({
   //   orderId: order.id,

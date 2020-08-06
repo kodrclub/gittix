@@ -1,15 +1,17 @@
+import { Message } from 'node-nats-streaming'
 import {
-  OrderCancelledEvent,
   Subjects,
   Listener,
+  OrderCancelledEvent,
   OrderStatus,
 } from '@kc-gittix/common'
-import { Message } from 'node-nats-streaming'
-import { queueGroupName } from './queue-group-name'
 import { Order } from '../../models/order'
+import { queueGroupName } from './queue-group-name'
+// import { TicketUpdatedPublisher } from '../publishers/ticket-updated-publisher'
 
 export class OrderCancelledListener extends Listener<OrderCancelledEvent> {
-  subject: Subjects.OrderCancelled = Subjects.OrderCancelled
+  readonly subject = Subjects.OrderCancelled
+
   queueGroupName = queueGroupName
 
   async onMessage(data: OrderCancelledEvent['data'], msg: Message) {

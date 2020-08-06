@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current'
 /*
-Describes the properties required to create a new user
+Describes the properties required to create a new ticket
 */
 interface TicketAttrs {
   price: number
