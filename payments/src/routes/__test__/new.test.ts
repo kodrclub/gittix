@@ -63,11 +63,9 @@ it('returns a 400 when trying to purchase a cancelled order ', async () => {
 })
 
 it('returns a 201 with valid inputs', async () => {
-  const orderId = global.generateId()
   const userId = global.generateId()
-
   const order = Order.build({
-    id: orderId,
+    id: global.generateId(),
     price: 20,
     status: OrderStatus.Created,
     userId,
@@ -80,117 +78,12 @@ it('returns a 201 with valid inputs', async () => {
     .set('Cookie', global.authenticate(userId))
     .send({
       token: 'tok_visa',
-      orderId: orderId,
+      orderId: order.id,
     })
     .expect(201)
 
-  // const chargeOptions = (stripe.charges.create as jest.Mock).mock.calls[0][0]
-  // expect(chargeOptions.amount).toEqual(20 * 100)
-  // expect(chargeOptions.currency).toEqual('eur')
-
-  // const payment = await Payment.findOne({
-  //   orderId: order.id,
-  //   stripeId: chargeOptions!.id,
-  // })
-  // console.log(payment)
-  // expect(payment).not.toBeNull()
+  const chargeOptions = (stripe.charges.create as jest.Mock).mock.calls[0][0]
+  expect(chargeOptions.source).toEqual('tok_visa')
+  expect(chargeOptions.amount).toEqual(20 * 100)
+  expect(chargeOptions.currency).toEqual('eur')
 })
-
-//
-//
-//----------------------------------------------------------------------------------------------------------
-//
-//
-// it('has a route handler listening at /api/tickets for post requests', async () => {
-//   const response = await request(app).post('/api/tickets').send({})
-
-//   expect(response.status).not.toEqual(404)
-// })
-
-// it('can only be accessed if the user is signed in', async () => {
-//   const response = await request(app).post('/api/tickets').send({}).expect(401)
-// })
-
-// it('returns a status other than 401 if the user is signed in', async () => {
-//   const response = await request(app)
-//     .post('/api/tickets')
-//     .set('Cookie', global.authenticate())
-//     .send({})
-
-//   expect(response.status).not.toEqual(401)
-// })
-
-// it('returns an error if an invalid title is provided', async () => {
-//   await request(app)
-//     .post('/api/tickets')
-//     .set('Cookie', global.authenticate())
-//     .send({
-//       title: '',
-//       price: 10,
-//     })
-//     .expect(400)
-
-//   await request(app)
-//     .post('/api/tickets')
-//     .set('Cookie', global.authenticate())
-//     .send({
-//       price: 10,
-//     })
-//     .expect(400)
-// })
-
-// it('returns an error if an invalid price is provided', async () => {
-//   await request(app)
-//     .post('/api/tickets')
-//     .set('Cookie', global.authenticate())
-//     .send({
-//       title: 'A test title',
-//       price: -10,
-//     })
-//     .expect(400)
-//   await request(app)
-//     .post('/api/tickets')
-//     .set('Cookie', global.authenticate())
-//     .send({
-//       title: 'A test title',
-//     })
-//     .expect(400)
-// })
-
-// it('creates a ticket with valid inputs', async () => {
-//   let tickets = await Ticket.find({})
-//   expect(tickets.length).toEqual(0)
-
-//   const title = 'A test title'
-//   const price = 10.5
-//   await request(app)
-//     .post('/api/tickets')
-//     .set('Cookie', global.authenticate())
-//     .send({
-//       title,
-//       price,
-//     })
-//     .expect(201)
-
-//   tickets = await Ticket.find({})
-//   expect(tickets.length).toEqual(1)
-//   expect(tickets[0].title).toEqual(title)
-//   expect(tickets[0].price).toEqual(price)
-// })
-
-// it('publishes an event', async () => {
-//   const title = 'A test title'
-//   const price = 10.5
-//   await request(app)
-//     .post('/api/tickets')
-//     .set('Cookie', global.authenticate())
-//     .send({
-//       title,
-//       price,
-//     })
-//     .expect(201)
-
-//   expect(natsWrapper.client.publish).toHaveBeenCalled()
-// })
-
-// it('', async()=>{})
