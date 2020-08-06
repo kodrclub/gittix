@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export default ({ req }) => {
+const Client = ({ req }) => {
   const runningOnServer = typeof window === 'undefined'
   const axiosDef = runningOnServer
     ? {
@@ -12,3 +12,5 @@ export default ({ req }) => {
 
   return axios.create(axiosDef)
 }
+
+export default Client
