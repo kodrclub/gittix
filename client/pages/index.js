@@ -1,10 +1,16 @@
 import buildClient from '../api/build-client'
+import Link from 'next/link'
 
 const LandingPage = ({ currentUser, tickets }) => {
   const ticketList = tickets.map((ticket) => {
+    const href = `/tickets/${ticket.id}`
     return (
       <tr key={ticket.lid}>
-        <td>{ticket.title}</td>
+        <td>
+          <Link href={href}>
+            <a>{ticket.title}</a>
+          </Link>
+        </td>
         <td>
           {ticket.price}
           <br />
