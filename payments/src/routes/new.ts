@@ -58,7 +58,7 @@ router.post(
     })
 
     res.status(201).send({
-      /*id: payment.id*/
+      id: payment.id,
     })
   }
 )

@@ -1,7 +1,7 @@
 import request from 'supertest'
 import { app } from '../../app'
 import { Order } from '../../models/order'
-// import { Payment } from '../../models/payment'
+import { Payment } from '../../models/payment'
 // import { natsWrapper } from '../../nats-wrapper'
 import { OrderStatus } from '@kc-gittix/common'
 import { stripe } from '../../stripe'
@@ -73,7 +73,7 @@ it('returns a 201 with valid inputs', async () => {
   })
   await order.save()
 
-  await request(app)
+  const paymentResponse = await request(app)
     .post('/api/payments')
     .set('Cookie', global.authenticate(userId))
     .send({
@@ -82,8 +82,15 @@ it('returns a 201 with valid inputs', async () => {
     })
     .expect(201)
 
-  const chargeOptions = (stripe.charges.create as jest.Mock).mock.calls[0][0]
-  expect(chargeOptions.source).toEqual('tok_visa')
-  expect(chargeOptions.amount).toEqual(20 * 100)
-  expect(chargeOptions.currency).toEqual('eur')
+  const stripeCharge = (stripe.charges.create as jest.Mock).mock.calls[0][0]
+  expect(stripeCharge.source).toEqual('tok_visa')
+  expect(stripeCharge.amount).toEqual(20 * 100)
+  expect(stripeCharge.currency).toEqual('eur')
+
+  // const payment = await Payment.findOne({
+  //   orderId: order.id,
+  //   stripeId: stripeCharge!.id,
+  // })
+  const payment = await Payment.findById(paymentResponse.body.id)
+  expect(payment).not.toBeNull()
 })
