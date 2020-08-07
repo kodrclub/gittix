@@ -4,8 +4,7 @@ const Client = ({ req }) => {
   const runningOnServer = typeof window === 'undefined'
   const axiosDef = runningOnServer
     ? {
-        baseURL:
-          'http://ingress-nginx-controller.ingress-nginx.svc.cluster.local',
+        baseURL: 'http://gittix.kodr.club/',
         headers: req.headers,
       }
     : { baseURL: '/' }
