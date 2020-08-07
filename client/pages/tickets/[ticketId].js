@@ -12,13 +12,19 @@ const TicketShow = ({ ticket }) => {
       Router.push('/orders/[orderId]', `/orders/${order.id}`),
   })
 
+  const purchaseButton = !ticket.orderId ? (
+    <button onClick={() => doRequest()} className="btn btn-primary">
+      Purchase
+    </button>
+  ) : (
+    <div>This ticket has already been purchased</div>
+  )
+
   return (
     <div>
       <h1>{ticket.title}</h1>
       <h4>{ticket.price}</h4>
-      <button onClick={() => doRequest()} className="btn btn-primary">
-        Purchase
-      </button>
+      {purchaseButton}
     </div>
   )
 }
