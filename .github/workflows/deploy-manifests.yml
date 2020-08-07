@@ -16,5 +16,4 @@ jobs:
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
       - run: doctl kubernetes clister kubeconfig save gittix-do
-      - run: kubectl rollout restart deployment manifests-depl
       - run: kubectl apply -f infra/k8s && kubectl apply -f infra/k8s-prod
