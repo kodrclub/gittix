@@ -15,7 +15,6 @@ spec:
       containers:
         - name: client
           image: kodrclub/mst-client
-
 ---
 apiVersion: v1
 kind: Service
